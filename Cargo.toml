@@ -1,0 +1,53 @@
+[package]
+name = "is31fl3193"
+version = "0.1.0"
+edition = "2021"
+authors = ["James Waples <jamwaffles@gmail.com>"]
+categories = ["embedded", "no-std"]
+description = "I2C driver for the IS31FL3193 RGB LED driver"
+documentation = "https://docs.rs/is31fl3193"
+keywords = ["no-std", "is31fl3193", "RGB", "LED","LUMISSIL","embedded", "embedded-hal-driver"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/papyDoctor/is31fl3193"
+exclude = [ "build.rs", "build.sh", "memory.x", "doc", "*.jpg", "*.png", "*.bmp" ]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+embedded-hal = "0.2.7"
+
+[dev-dependencies]
+cortex-m-rt = "0.7.1"
+cortex-m = "0.7.6"
+embedded-hal = "0.2.7"
+rp2040-hal = { version = "0.8.0", features = ["eh1_0_alpha"] }
+rp-pico = { version = "0.7.0", features = ["rt"] }
+panic-halt = "0.2.0"
+fugit = "0.3.6"
+defmt = "0.3.2"
+defmt-rtt = "0.4.0"
+panic-probe = { version = "0.3", features = ["print-defmt"] }
+
+# cargo build/run
+[profile.dev]
+codegen-units = 1
+debug = 2
+debug-assertions = true
+incremental = false
+opt-level = 0
+overflow-checks = true
+test = false
+bench = false
+
+# cargo build/run --release
+[profile.release]
+codegen-units = 1
+debug = 2
+debug-assertions = false
+incremental = false
+lto = 'fat'
+opt-level = 3
+overflow-checks = false
+test = false
+bench = false
