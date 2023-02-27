@@ -47,38 +47,37 @@ where
         };
         Self { i2c, address }
     }
-
     /// Consume the interface and return the underlying peripherial driver
     pub fn release(self) -> I2C {
         self.i2c
     }
-
+    /// Set the maximum current for all the three outputs
     pub fn set_max_current(&mut self, intensity: Intensity) -> Result<(), IS31FL3193Error<E>> {
         self.send(Command::Current(intensity))
     }
-
+    /// Set PWM for each of the three output
     pub fn set_pwm(&mut self, led1: u8, led2: u8, led3: u8) -> Result<(), IS31FL3193Error<E>> {
         self.send(Command::PWMLed1(led1))?;
         self.send(Command::PWMLed2(led2))?;
         self.send(Command::PWMLed3(led3))?;
         self.send(Command::PWMUpdate)
     }
-
+    /// Set PWM for LED1 (OUT1)
     pub fn set_pwm_led1(&mut self, led1: u8) -> Result<(), IS31FL3193Error<E>> {
         self.send(Command::PWMLed1(led1))?;
         self.send(Command::PWMUpdate)
     }
-
+    /// Set PWM for LED2 (OUT2)
     pub fn set_pwm_led2(&mut self, led2: u8) -> Result<(), IS31FL3193Error<E>> {
         self.send(Command::PWMLed1(led2))?;
         self.send(Command::PWMUpdate)
     }
-
+    /// Set PWM for LED3 (OUT3)
     pub fn set_pwm_led3(&mut self, led3: u8) -> Result<(), IS31FL3193Error<E>> {
         self.send(Command::PWMLed1(led3))?;
         self.send(Command::PWMUpdate)
     }
-
+    /// Set the breath timing for a given output
     pub fn set_timing(
         &mut self,
         led: Channel,
@@ -107,7 +106,7 @@ where
         }
         self.send(Command::BreathTimingUpdate)
     }
-
+    /// Set the mode. There are two modes, PWM and breathing (see DS)
     pub fn set_mode(&mut self, mode: Mode) -> Result<(), IS31FL3193Error<E>> {
         match mode {
             Mode::PWM => self.send(Command::LedMode(false)),
@@ -142,7 +141,7 @@ where
             }
         }
     }
-
+    /// Enable/disable all LEDS and set/clear shutdown
     pub fn shutdown(
         &mut self,
         enable_all_leds: bool,
@@ -156,6 +155,8 @@ where
             .map_err(IS31FL3193Error::I2c)
     }
 }
+
+/// Maximum currents
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum Intensity {
@@ -165,12 +166,15 @@ pub enum Intensity {
     MA30 = 3 << 2,
     MA42 = 0 << 2,
 }
+/// IC modes
 #[allow(clippy::upper_case_acronyms)]
 #[derive(Copy, Clone)]
 pub enum Mode {
     PWM,
     Breath(BreathingMode, Marking),
 }
+/// Breathing. Auto for continuous variations, OneCycle for one shot variation,
+/// RampToOn for ramping from 0 to PWM value
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum BreathingMode {
@@ -178,11 +182,13 @@ pub enum BreathingMode {
     OneCycle,
     RampToOn,
 }
+/// Enable/disable hardware output marking for a given output
 #[derive(Copy, Clone)]
 pub enum Marking {
     Off,
     On(Channel),
 }
+/// Output selection
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum Channel {
@@ -190,6 +196,7 @@ pub enum Channel {
     Led2 = 1,
     Led3 = 2,
 }
+/// Timing. T0 is an offset time period which runs only once at the start of the cycle
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum T0 {
@@ -205,6 +212,7 @@ pub enum T0 {
     MS33280 = 9,
     MS66560 = 10,
 }
+/// Timing. T1 is the rising time
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum T1 {
@@ -217,6 +225,7 @@ pub enum T1 {
     MS8320 = 6 << 5,
     MS16640 = 7 << 5,
 }
+/// Timing. T2 is the steady ON time
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum T2 {
@@ -230,6 +239,7 @@ pub enum T2 {
     MS8320 = 7 << 1,
     MS16640 = 8 << 1,
 }
+/// Timing. T3 is the falling time
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum T3 {
@@ -242,6 +252,7 @@ pub enum T3 {
     MS8320 = 6 << 5,
     MS16640 = 7 << 5,
 }
+/// Timing. T4 is the steady OFF time
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum T4 {

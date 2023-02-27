@@ -1,6 +1,6 @@
 [package]
 name = "is31fl3193"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["James Waples <jamwaffles@gmail.com>"]
 categories = ["embedded", "no-std"]
@@ -13,7 +13,6 @@ repository = "https://github.com/papyDoctor/is31fl3193"
 exclude = [ "build.rs", "build.sh", "memory.x", "doc", "*.jpg", "*.png", "*.bmp" ]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 embedded-hal = "0.2.7"
 
